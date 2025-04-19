@@ -1326,3 +1326,58 @@ export const MEDICAL_VERIFIER_ABI = [
   {
     "type": "function",
     "name": "rejectGenesis",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+];
+
+// Define types for contract data structures
+export interface ApplicationDocs {
+  fullName: string;
+  contactInfo: string;
+  governmentID: string;
+  professionalDocs: string;
+}
+
+export enum VerifierType {
+  None = 0,
+  HealthProfessional = 1,
+  Dao = 2,
+  AutoDao = 3,
+  Genesis = 4
+}
+
+export enum ApplicationStatus {
+  Pending = 0,
+  Approved = 1,
+  Rejected = 2,
+  Revoked = 3,
+  Withdrawn = 4
+}
+
+export interface VerifierData {
+  vType: VerifierType; 
+  status: ApplicationStatus;
+  docs: ApplicationDocs;
+  nftId: number;
+}
+
+export interface EmergencySettings {
+  paused: boolean;
+  duration: number;
+  lastPaused: number;
+}
+
+export interface SystemConfig {
+  maxHP: number;
+  maxDao: number;
+  minDonation: number;
+  minCampaigns: number;
+}
+
+export interface VerifierCounts {
+  health: number;
+  manualDao: number;
+  autoDao: number;
+}
