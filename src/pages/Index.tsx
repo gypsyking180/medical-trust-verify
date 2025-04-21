@@ -2,21 +2,32 @@
 import React from 'react';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from '@/components/layout/AppSidebar';
-import Dashboard from './Dashboard';
+import NavBar from '@/components/layout/NavBar';
+import Hero from '@/components/home/Hero';
+import Statistics from '@/components/home/Statistics';
+import Features from '@/components/home/Features';
+import Footer from '@/components/layout/Footer';
+import { Helmet } from 'react-helmet';
 
 const Index = () => {
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <AppSidebar />
-        <div className="flex-1">
-          <div className="p-4">
-            <SidebarTrigger />
-          </div>
-          <Dashboard />
+    <>
+      <Helmet>
+        <title>careBridge | Medical Crowdfunding on Blockchain</title>
+        <meta name="description" content="A decentralized medical crowdfunding platform powered by blockchain verification" />
+      </Helmet>
+      <SidebarProvider>
+        <div className="min-h-screen flex flex-col w-full">
+          <NavBar />
+          <main className="flex-1">
+            <Hero />
+            <Statistics />
+            <Features />
+          </main>
+          <Footer />
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </>
   );
 };
 

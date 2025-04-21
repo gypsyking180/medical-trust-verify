@@ -10,58 +10,32 @@ import ApplyAsGenesis from "./pages/ApplyAsGenesis";
 import ApplyAsHealthPro from "./pages/ApplyAsHealthPro";
 import ApplyAsDao from "./pages/ApplyAsDao";
 import ContractPage from "./pages/ContractPage";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import AppSidebar from './components/layout/AppSidebar';
+import Web3Provider from "./components/layout/Web3Provider";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => (
-  <SidebarProvider>
-    <div className="min-h-screen flex w-full">
-      <AppSidebar />
-      <div className="flex-1">
-        <div className="p-4">
-          <SidebarTrigger />
-        </div>
-        {children}
-      </div>
-    </div>
-  </SidebarProvider>
-);
-
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/apply/genesis" element={
-            <PageLayout>
-              <ApplyAsGenesis />
-            </PageLayout>
-          } />
-          <Route path="/apply/health" element={
-            <PageLayout>
-              <ApplyAsHealthPro />
-            </PageLayout>
-          } />
-          <Route path="/apply/dao" element={
-            <PageLayout>
-              <ApplyAsDao />
-            </PageLayout>
-          } />
-          <Route path="/contract" element={
-            <PageLayout>
-              <ContractPage />
-            </PageLayout>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <Web3Provider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/apply/genesis" element={<ApplyAsGenesis />} />
+              <Route path="/apply/health" element={<ApplyAsHealthPro />} />
+              <Route path="/apply/dao" element={<ApplyAsDao />} />
+              <Route path="/contract" element={<ContractPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </Web3Provider>
+    </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

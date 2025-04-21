@@ -1,0 +1,148 @@
+
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { UserRole, useUserRole } from '@/hooks/useUserRole';
+import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X } from 'lucide-react';
+
+const NavBar = () => {
+  const { userRole, isLoading } = useUserRole();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Define navigation links based on user role
+  const getNavigationItems = () => {
+    // Common links for all roles
+    const commonLinks = [
+      {
+        title: 'Browse Campaign',
+        path: '/campaigns',
+        icon: <Heart className="text-medical-green" size={20} />
+      },
+      {
+        title: 'How It Works',
+        path: '/how-it-works',
+        icon: <Info size={20} />
+      }
+    ];
+
+    // Role-specific links
+    if (userRole === UserRole.Owner) {
+      return [
+        ...commonLinks,
+        {
+          title: 'Verification Portal',
+          path: '/verification',
+          icon: <Shield size={20} />
+        },
+        {
+          title: 'Emergency Portal',
+          path: '/emergency',
+          icon: <Ambulance size={20} />
+        }
+      ];
+    } else if (userRole === UserRole.Verifier) {
+      return [
+        ...commonLinks,
+        {
+          title: 'Become Verifier',
+          path: '/apply',
+          icon: <User size={20} />
+        },
+        {
+          title: 'Proposal Portal',
+          path: '/proposals',
+          icon: <FileText size={20} />
+        },
+        {
+          title: 'Vote Portal',
+          path: '/vote',
+          icon: <Vote size={20} />
+        },
+        {
+          title: 'Claim Reward',
+          path: '/rewards',
+          icon: <Award size={20} />
+        }
+      ];
+    } else {
+      return [
+        ...commonLinks,
+        {
+          title: 'Become Verifier',
+          path: '/apply',
+          icon: <User size={20} />
+        }
+      ];
+    }
+  };
+
+  const navigationItems = getNavigationItems();
+
+  return (
+    <nav className="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center text-xl font-bold text-primary">
+              <Heart className="mr-2 text-secondary" size={24} />
+              careBridge
+            </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.title}
+                to={item.path}
+                className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800"
+              >
+                {item.icon}
+                <span className="ml-2">{item.title}</span>
+              </Link>
+            ))}
+            <div className="ml-4">
+              <ConnectButton showBalance={false} />
+            </div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex md:hidden items-center">
+            <div className="mr-2">
+              <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />
+            </div>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none"
+              aria-expanded={isMenuOpen}
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu, show/hide based on menu state */}
+      {isMenuOpen && (
+        <div className="md:hidden p-4 bg-white shadow-lg rounded-b-lg">
+          <div className="flex flex-col space-y-2 pt-2 pb-3">
+            {navigationItems.map((item) => (
+              <Link
+                key={item.title}
+                to={item.path}
+                className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 text-gray-800"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.icon}
+                <span className="ml-2">{item.title}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default NavBar;
