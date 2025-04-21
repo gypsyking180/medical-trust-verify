@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { readContract } from '@wagmi/core';
 import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
+import { wagmiConfig } from '@/config/web3Config';
 
 export enum UserRole {
   Owner = 'owner',
@@ -25,7 +26,7 @@ export const useUserRole = () => {
 
       try {
         // Check if user is owner
-        const isOwner = await readContract({
+        const isOwner = await readContract(wagmiConfig, {
           address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
           abi: [
             {
@@ -59,7 +60,7 @@ export const useUserRole = () => {
         }
 
         // Check if user is approved verifier
-        const isVerifier = await readContract({
+        const isVerifier = await readContract(wagmiConfig, {
           address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
           abi: [
             {
