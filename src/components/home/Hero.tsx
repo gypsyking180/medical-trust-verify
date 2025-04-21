@@ -1,10 +1,38 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, PlusCircle, Gift } from 'lucide-react';
+import { Heart, PlusCircle, Gift, FileText, FilePlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAccount, useConnect } from 'wagmi';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
+  const { isConnected } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { toast } = useToast();
+
+  const handleCreateCampaignClick = () => {
+    if (!isConnected) {
+      toast({
+        title: "Wallet Connection Required",
+        description: "Please connect your wallet first to create a campaign.",
+        variant: "destructive",
+      });
+      
+      // Connect using the first available connector (usually injected - MetaMask)
+      const connector = connectors[0];
+      if (connector) {
+        connect({ connector });
+      }
+      return;
+    }
+  };
+
   return (
     <div className="relative bg-gradient-to-b from-blue-50 to-white pt-16 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,12 +54,35 @@ const Hero = () => {
             </p>
             <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
-                <Button asChild size="lg" className="w-full sm:w-auto">
-                  <Link to="/campaigns/create">
+                {isConnected ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button size="lg" className="w-full sm:w-auto">
+                        <PlusCircle className="mr-2" size={18} />
+                        Create Campaign
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-48">
+                      <DropdownMenuItem asChild>
+                        <Link to="/campaigns/new" className="w-full flex items-center">
+                          <FilePlus className="mr-2" size={18} />
+                          New Campaign
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/campaigns/appeal" className="w-full flex items-center">
+                          <FileText className="mr-2" size={18} />
+                          Appeal Campaign
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button size="lg" className="w-full sm:w-auto" onClick={handleCreateCampaignClick}>
                     <PlusCircle className="mr-2" size={18} />
                     Create Campaign
-                  </Link>
-                </Button>
+                  </Button>
+                )}
                 <Button asChild variant="outline" size="lg" className="mt-3 sm:mt-0 w-full sm:w-auto">
                   <Link to="/donate">
                     <Gift className="mr-2" size={18} />
