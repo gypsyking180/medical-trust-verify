@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Check, Shield, Zap, Heart, Lock } from 'lucide-react';
+import { Check, Shield, Zap, Heart, Lock, Users } from 'lucide-react';
 
 const Features = () => {
   return (
