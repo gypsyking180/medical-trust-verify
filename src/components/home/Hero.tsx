@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart } from 'lucide-react';
+import { Heart, PlusCircle, Gift } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
@@ -27,13 +27,16 @@ const Hero = () => {
             <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
                 <Button asChild size="lg" className="w-full sm:w-auto">
-                  <Link to="/campaigns">
-                    <Heart className="mr-2" size={18} />
-                    Explore Campaigns
+                  <Link to="/campaigns/create">
+                    <PlusCircle className="mr-2" size={18} />
+                    Create Campaign
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="mt-3 sm:mt-0 w-full sm:w-auto">
-                  <Link to="/how-it-works">Learn How It Works</Link>
+                  <Link to="/donate">
+                    <Gift className="mr-2" size={18} />
+                    Donate
+                  </Link>
                 </Button>
               </div>
             </div>
