@@ -14,8 +14,8 @@ interface Web3ProviderProps {
 const Web3Provider: React.FC<Web3ProviderProps> = ({ children }) => {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} theme={darkTheme({
-        accentColor: '#0284c7', // For primary blue color
+      <RainbowKitProvider theme={darkTheme({
+        accentColor: '#0284c7',
         accentColorForeground: 'white',
       })}>
         {children}

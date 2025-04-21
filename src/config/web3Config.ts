@@ -1,29 +1,26 @@
 
 import { getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { configureChains, createConfig } from 'wagmi';
-import { publicProvider } from 'wagmi/providers/public';
+import { http } from 'wagmi';
+import { createConfig } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 
-// Configure chains
-const { chains, publicClient } = configureChains(
-  [sepolia],
-  [
-    publicProvider()
-  ]
-);
+// Configure chains & providers
+const projectId = 'careBridge-medical-crowdfunding';
 
 // Configure rainbow kit
 const { connectors } = getDefaultWallets({
   appName: 'careBridge',
-  projectId: 'careBridge-medical-crowdfunding',
-  chains
+  projectId: projectId,
 });
 
 // Create wagmi config
 export const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient
+  chains: [sepolia],
+  transports: {
+    [sepolia.id]: http()
+  },
+  connectors
 });
 
-export { chains };
+// Export chains for RainbowKit
+export const chains = [sepolia];

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Heart, Users, Hospital, Award } from 'lucide-react';
+import { Heart, User, Hospital, Award } from 'lucide-react';
 
 const Statistics = () => {
   return (
@@ -28,7 +28,7 @@ const Statistics = () => {
 
             <div className="bg-white overflow-hidden shadow rounded-lg border-t-4 border-secondary px-4 py-5 sm:p-6">
               <dt className="text-sm font-medium text-gray-500 truncate flex items-center">
-                <Users className="mr-2 text-secondary" size={20} />
+                <User className="mr-2 text-secondary" size={20} />
                 Medical Professionals
               </dt>
               <dd className="mt-1 text-3xl font-semibold text-gray-900">86</dd>

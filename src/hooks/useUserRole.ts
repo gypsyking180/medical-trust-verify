@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
 import { readContract } from '@wagmi/core';
+import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
 
 export enum UserRole {
   Owner = 'owner',

@@ -7,7 +7,7 @@ import Hero from '@/components/home/Hero';
 import Statistics from '@/components/home/Statistics';
 import Features from '@/components/home/Features';
 import Footer from '@/components/layout/Footer';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
   return (
