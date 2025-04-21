@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { MEDICAL_CROWDFUNDING_CONTRACT } from '@/config/contracts';
 import { 
-  CampaignBasicInfo, 
+  CampaignBasicInfo,
   CampaignDocuments, 
   DocumentConsent, 
   PatientDetails,

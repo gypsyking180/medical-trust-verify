@@ -1,4 +1,3 @@
-
 import { Address } from 'viem';
 
 export enum CampaignStatus {
@@ -72,6 +71,17 @@ export interface Campaign {
   donatedAmount: bigint;
   totalFeeCollected: bigint;
   amountReceivedUSD: bigint;
+  feesDistributed: boolean;
+}
+
+export interface CampaignBasicInfo {
+  id: number;
+  patient: Address;
+  amountNeededUSD: bigint;
+  donatedAmount: bigint;
+  status: CampaignStatus;
+  healthYesVotes: bigint;
+  healthNoVotes: bigint;
   feesDistributed: boolean;
 }
 
