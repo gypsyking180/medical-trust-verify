@@ -33,6 +33,7 @@ const App = () => (
               <Route path="/contract" element={<ContractPage />} />
               <Route path="/campaigns/new" element={<NewCampaign />} />
               <Route path="/campaigns/appeal" element={<AppealCampaign />} />
+              <Route path="/donate" element={<DonatePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
