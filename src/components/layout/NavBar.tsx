@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { UserRole, useUserRole } from '@/hooks/useUserRole';
-import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X } from 'lucide-react';
+import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X, Users, UserCheck } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NavBar = () => {
   const { userRole, isLoading } = useUserRole();
@@ -45,7 +51,7 @@ const NavBar = () => {
         ...commonLinks,
         {
           title: 'Become Verifier',
-          path: '/apply',
+          dropdown: true,
           icon: <User size={20} />
         },
         {
@@ -69,7 +75,7 @@ const NavBar = () => {
         ...commonLinks,
         {
           title: 'Become Verifier',
-          path: '/apply',
+          dropdown: true,
           icon: <User size={20} />
         }
       ];
@@ -92,14 +98,43 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {navigationItems.map((item) => (
-              <Link
-                key={item.title}
-                to={item.path}
-                className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800"
-              >
-                {item.icon}
-                <span className="ml-2">{item.title}</span>
-              </Link>
+              item.dropdown ? (
+                <DropdownMenu key={item.title}>
+                  <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
+                    {item.icon}
+                    <span className="ml-2">{item.title}</span>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem asChild>
+                      <Link to="/apply/genesis" className="flex items-center">
+                        <Shield className="mr-2" size={18} />
+                        <span>Apply as Genesis Member</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/apply/health" className="flex items-center">
+                        <UserCheck className="mr-2" size={18} />
+                        <span>Apply as Health Professional</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/apply/dao" className="flex items-center">
+                        <Users className="mr-2" size={18} />
+                        <span>Apply as DAO</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link
+                  key={item.title}
+                  to={item.path}
+                  className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800"
+                >
+                  {item.icon}
+                  <span className="ml-2">{item.title}</span>
+                </Link>
+              )
             ))}
             <div className="ml-4">
               <ConnectButton showBalance={false} />
@@ -128,15 +163,50 @@ const NavBar = () => {
         <div className="md:hidden p-4 bg-white shadow-lg rounded-b-lg">
           <div className="flex flex-col space-y-2 pt-2 pb-3">
             {navigationItems.map((item) => (
-              <Link
-                key={item.title}
-                to={item.path}
-                className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 text-gray-800"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.icon}
-                <span className="ml-2">{item.title}</span>
-              </Link>
+              item.dropdown ? (
+                <div key={item.title} className="px-3 py-2">
+                  <div className="flex items-center text-base font-medium text-gray-800 mb-2">
+                    {item.icon}
+                    <span className="ml-2">{item.title}</span>
+                  </div>
+                  <div className="pl-6 flex flex-col space-y-2">
+                    <Link 
+                      to="/apply/genesis"
+                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Shield className="mr-2" size={16} />
+                      <span>Apply as Genesis Member</span>
+                    </Link>
+                    <Link 
+                      to="/apply/health"
+                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <UserCheck className="mr-2" size={16} />
+                      <span>Apply as Health Professional</span>
+                    </Link>
+                    <Link 
+                      to="/apply/dao"
+                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Users className="mr-2" size={16} />
+                      <span>Apply as DAO</span>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.title}
+                  to={item.path}
+                  className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 text-gray-800"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.icon}
+                  <span className="ml-2">{item.title}</span>
+                </Link>
+              )
             ))}
           </div>
         </div>

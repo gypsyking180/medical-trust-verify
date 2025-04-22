@@ -24,6 +24,7 @@ export const useVerifierContract = () => {
         title: "Application Submitted",
         description: "Your Genesis member application has been submitted successfully.",
       });
+      return true;
     } catch (error) {
       console.error("Error applying as Genesis:", error);
       toast({
@@ -31,6 +32,7 @@ export const useVerifierContract = () => {
         description: "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
+      return false;
     }
   }, [toast]);
 
@@ -46,6 +48,7 @@ export const useVerifierContract = () => {
         title: "Application Submitted",
         description: "Your Health Professional application has been submitted successfully.",
       });
+      return true;
     } catch (error) {
       console.error("Error applying as Health Professional:", error);
       toast({
@@ -53,6 +56,7 @@ export const useVerifierContract = () => {
         description: "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
+      return false;
     }
   }, [toast]);
 
@@ -67,6 +71,7 @@ export const useVerifierContract = () => {
         title: "Application Submitted",
         description: "Your DAO member application has been submitted successfully.",
       });
+      return true;
     } catch (error) {
       console.error("Error applying as DAO member:", error);
       toast({
@@ -74,6 +79,7 @@ export const useVerifierContract = () => {
         description: "There was an error submitting your application. Please try again.",
         variant: "destructive",
       });
+      return false;
     }
   }, [toast]);
 
