@@ -1,16 +1,10 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, PlusCircle, Gift, FileText, FilePlus } from 'lucide-react';
+import { Heart, Gift } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAccount, useConnect } from 'wagmi';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import CreateCampaignDropdown from '../campaign/CreateCampaignDropdown';
 
 const Hero = () => {
   const { isConnected } = useAccount();
@@ -56,31 +50,10 @@ const Hero = () => {
             <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-4">
                 {isConnected ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button size="lg" className="w-full sm:w-auto">
-                        <PlusCircle className="mr-2" size={18} />
-                        Create Campaign
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-48">
-                      <DropdownMenuItem asChild>
-                        <Link to="/campaigns/new" className="w-full flex items-center">
-                          <FilePlus className="mr-2" size={18} />
-                          New Campaign
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/campaigns/appeal" className="w-full flex items-center">
-                          <FileText className="mr-2" size={18} />
-                          Appeal Campaign
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <CreateCampaignDropdown />
                 ) : (
                   <Button size="lg" className="w-full sm:w-auto" onClick={handleCreateCampaignClick}>
-                    <PlusCircle className="mr-2" size={18} />
+                    <FilePlus className="mr-2" size={18} />
                     Create Campaign
                   </Button>
                 )}
