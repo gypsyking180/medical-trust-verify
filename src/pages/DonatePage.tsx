@@ -25,7 +25,7 @@ const DonatePage = () => {
   const { isConnected } = useAccount();
   const navigate = useNavigate();
   const { donateToCampaign } = useCrowdfundingContract();
-  const { activeCampaigns, isLoading: campaignsLoading } = useActiveCampaigns();
+  const { data: activeCampaigns, isLoading: campaignsLoading } = useActiveCampaigns();
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({

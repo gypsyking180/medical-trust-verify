@@ -12,6 +12,7 @@ import ApplyAsDao from "./pages/ApplyAsDao";
 import ContractPage from "./pages/ContractPage";
 import NewCampaign from "./pages/NewCampaign";
 import AppealCampaign from "./pages/AppealCampaign";
+import DonatePage from "./pages/DonatePage";
 import Web3Provider from "./components/layout/Web3Provider";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
