@@ -52,6 +52,7 @@ import NavBar from '@/components/layout/NavBar';
 import Footer from '@/components/layout/Footer';
 import { cn } from "@/lib/utils";
 import { useCrowdfundingContract } from '@/hooks/useCrowdfundingContract';
+import { Address } from 'viem';
 
 // Define the form schema for campaign creation
 const campaignFormSchema = z.object({
@@ -211,7 +212,7 @@ const NewCampaign = () => {
       };
 
       let guardianDetails = {
-        guardian: "0x0000000000000000000000000000000000000000", // Default zero address
+        guardian: "0x0000000000000000000000000000000000000000" as Address, // Default zero address with correct typing
         guardianFullName: "",
         guardianMobileNumber: "",
         guardianGovernmentID: "",
@@ -221,7 +222,7 @@ const NewCampaign = () => {
       if (data.hasGuardian && data.guardianFullName && data.guardianMobileNumber && 
           data.guardianGovernmentIDIPFS && data.guardianResidentialAddress) {
         guardianDetails = {
-          guardian: data.walletAddress, // Using the same wallet address as patient for now
+          guardian: data.walletAddress as Address, // Cast to Address type
           guardianFullName: data.guardianFullName,
           guardianMobileNumber: data.guardianMobileNumber,
           guardianGovernmentID: data.guardianGovernmentIDIPFS,
