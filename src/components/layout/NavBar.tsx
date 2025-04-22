@@ -11,14 +11,32 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+// Define types for navigation items
+type BaseNavItem = {
+  title: string;
+  icon: React.ReactNode;
+};
+
+type LinkNavItem = BaseNavItem & {
+  path: string;
+  dropdown?: never;
+};
+
+type DropdownNavItem = BaseNavItem & {
+  dropdown: true;
+  path?: never;
+};
+
+type NavItem = LinkNavItem | DropdownNavItem;
+
 const NavBar = () => {
   const { userRole, isLoading } = useUserRole();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Define navigation links based on user role
-  const getNavigationItems = () => {
+  const getNavigationItems = (): NavItem[] => {
     // Common links for all roles
-    const commonLinks = [
+    const commonLinks: NavItem[] = [
       {
         title: 'Browse Campaign',
         path: '/campaigns',
@@ -98,7 +116,7 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {navigationItems.map((item) => (
-              item.dropdown ? (
+              'dropdown' in item && item.dropdown ? (
                 <DropdownMenu key={item.title}>
                   <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
                     {item.icon}
@@ -163,7 +181,7 @@ const NavBar = () => {
         <div className="md:hidden p-4 bg-white shadow-lg rounded-b-lg">
           <div className="flex flex-col space-y-2 pt-2 pb-3">
             {navigationItems.map((item) => (
-              item.dropdown ? (
+              'dropdown' in item && item.dropdown ? (
                 <div key={item.title} className="px-3 py-2">
                   <div className="flex items-center text-base font-medium text-gray-800 mb-2">
                     {item.icon}
