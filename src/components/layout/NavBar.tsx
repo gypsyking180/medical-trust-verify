@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { UserRole, useUserRole } from '@/hooks/useUserRole';
-import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X, Users, UserCheck } from 'lucide-react';
+import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X, Users, UserCheck, Trash2, DollarSign } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +24,11 @@ type LinkNavItem = BaseNavItem & {
 
 type DropdownNavItem = BaseNavItem & {
   dropdown: true;
+  children?: Array<{
+    title: string;
+    icon: React.ReactNode;
+    path: string;
+  }>;
   path?: never;
 };
 
@@ -70,12 +75,41 @@ const NavBar = () => {
         {
           title: 'Become Verifier',
           dropdown: true,
-          icon: <User size={20} />
+          icon: <User size={20} />,
+          children: [
+            {
+              title: "Apply as Genesis Member",
+              icon: <Shield className="mr-2" size={18} />,
+              path: "/apply/genesis"
+            },
+            {
+              title: "Apply as Health Professional",
+              icon: <UserCheck className="mr-2" size={18} />,
+              path: "/apply/health"
+            },
+            {
+              title: "Apply as DAO",
+              icon: <Users className="mr-2" size={18} />,
+              path: "/apply/dao"
+            }
+          ]
         },
         {
           title: 'Proposal Portal',
-          path: '/proposals',
-          icon: <FileText size={20} />
+          dropdown: true,
+          icon: <FileText size={20} />,
+          children: [
+            {
+              title: "Revocation Proposal",
+              icon: <Trash2 className="mr-2" size={18} />,
+              path: "/proposals/revocation"
+            },
+            {
+              title: "Fee Proposal",
+              icon: <DollarSign className="mr-2" size={18} />,
+              path: "/proposals/fee"
+            }
+          ]
         },
         {
           title: 'Vote Portal',
@@ -94,7 +128,24 @@ const NavBar = () => {
         {
           title: 'Become Verifier',
           dropdown: true,
-          icon: <User size={20} />
+          icon: <User size={20} />,
+          children: [
+            {
+              title: "Apply as Genesis Member",
+              icon: <Shield className="mr-2" size={18} />,
+              path: "/apply/genesis"
+            },
+            {
+              title: "Apply as Health Professional",
+              icon: <UserCheck className="mr-2" size={18} />,
+              path: "/apply/health"
+            },
+            {
+              title: "Apply as DAO",
+              icon: <Users className="mr-2" size={18} />,
+              path: "/apply/dao"
+            }
+          ]
         }
       ];
     }
@@ -122,25 +173,39 @@ const NavBar = () => {
                     {item.icon}
                     <span className="ml-2">{item.title}</span>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuItem asChild>
-                      <Link to="/apply/genesis" className="flex items-center">
-                        <Shield className="mr-2" size={18} />
-                        <span>Apply as Genesis Member</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/apply/health" className="flex items-center">
-                        <UserCheck className="mr-2" size={18} />
-                        <span>Apply as Health Professional</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/apply/dao" className="flex items-center">
-                        <Users className="mr-2" size={18} />
-                        <span>Apply as DAO</span>
-                      </Link>
-                    </DropdownMenuItem>
+                  <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
+                    {/* Dropdown buttons (supports children for dropdowns like Become Verifier and Proposal Portal) */}
+                    {'children' in item && item.children ? (
+                      item.children.map(child => (
+                        <DropdownMenuItem asChild key={child.title}>
+                          <Link to={child.path} className="flex items-center">
+                            {child.icon}
+                            <span>{child.title}</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      ))
+                    ) : (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/apply/genesis" className="flex items-center">
+                            <Shield className="mr-2" size={18} />
+                            <span>Apply as Genesis Member</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/apply/health" className="flex items-center">
+                            <UserCheck className="mr-2" size={18} />
+                            <span>Apply as Health Professional</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/apply/dao" className="flex items-center">
+                            <Users className="mr-2" size={18} />
+                            <span>Apply as DAO</span>
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
@@ -188,30 +253,46 @@ const NavBar = () => {
                     <span className="ml-2">{item.title}</span>
                   </div>
                   <div className="pl-6 flex flex-col space-y-2">
-                    <Link 
-                      to="/apply/genesis"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Shield className="mr-2" size={16} />
-                      <span>Apply as Genesis Member</span>
-                    </Link>
-                    <Link 
-                      to="/apply/health"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <UserCheck className="mr-2" size={16} />
-                      <span>Apply as Health Professional</span>
-                    </Link>
-                    <Link 
-                      to="/apply/dao"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Users className="mr-2" size={16} />
-                      <span>Apply as DAO</span>
-                    </Link>
+                    {'children' in item && item.children ? (
+                      item.children.map(child => (
+                        <Link
+                          key={child.title}
+                          to={child.path}
+                          className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {child.icon}
+                          <span>{child.title}</span>
+                        </Link>
+                      ))
+                    ) : (
+                      <>
+                        <Link 
+                          to="/apply/genesis"
+                          className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <Shield className="mr-2" size={16} />
+                          <span>Apply as Genesis Member</span>
+                        </Link>
+                        <Link 
+                          to="/apply/health"
+                          className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <UserCheck className="mr-2" size={16} />
+                          <span>Apply as Health Professional</span>
+                        </Link>
+                        <Link 
+                          to="/apply/dao"
+                          className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <Users className="mr-2" size={16} />
+                          <span>Apply as DAO</span>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -234,3 +315,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
