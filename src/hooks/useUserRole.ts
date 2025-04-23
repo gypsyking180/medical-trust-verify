@@ -1,9 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import { readContract } from '@wagmi/core';
-import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
-import { wagmiConfig } from '@/config/web3Config';
+import { OWNER_ADDRESS, VERIFIER_ADDRESS } from '@/config/roleAddresses';
 
 export enum UserRole {
   Owner = 'owner',
@@ -25,69 +23,27 @@ export const useUserRole = () => {
       }
 
       try {
-        // Check if user is owner
-        const isOwner = await readContract(wagmiConfig, {
-          address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
-          abi: [
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "addr",
-                  "type": "address"
-                }
-              ],
-              "name": "isOwner",
-              "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "",
-                  "type": "bool"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            }
-          ],
-          functionName: 'isOwner',
-          args: [address]
-        });
+        // Check using the direct address comparison
+        const normalizedAddress = address.toLowerCase();
+        const normalizedOwnerAddress = OWNER_ADDRESS.toLowerCase();
+        const normalizedVerifierAddress = VERIFIER_ADDRESS.toLowerCase();
 
-        if (isOwner) {
+        if (normalizedAddress === normalizedOwnerAddress) {
           setUserRole(UserRole.Owner);
-          setIsLoading(false);
-          return;
+        } else if (normalizedAddress === normalizedVerifierAddress) {
+          setUserRole(UserRole.Verifier);
+        } else {
+          setUserRole(UserRole.Default);
         }
 
-        // Check if user is approved verifier
-        const isVerifier = await readContract(wagmiConfig, {
-          address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
-          abi: [
-            {
-              "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "addr",
-                  "type": "address"
-                }
-              ],
-              "name": "isApprovedVerifier",
-              "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "",
-                  "type": "bool"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            }
-          ],
-          functionName: 'isApprovedVerifier',
-          args: [address]
+        // Log the role detection for debugging
+        console.log("User role detection:", {
+          userAddress: normalizedAddress,
+          ownerAddress: normalizedOwnerAddress,
+          verifierAddress: normalizedVerifierAddress,
+          detectedRole: normalizedAddress === normalizedOwnerAddress ? "Owner" : 
+                        normalizedAddress === normalizedVerifierAddress ? "Verifier" : "Default"
         });
-
-        setUserRole(isVerifier ? UserRole.Verifier : UserRole.Default);
       } catch (error) {
         console.error("Error checking user role:", error);
         setUserRole(UserRole.Default);
