@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Heart, Gift } from 'lucide-react';
+import { Heart, Gift, FilePlus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAccount, useConnect } from 'wagmi';
 import { useToast } from "@/hooks/use-toast";
