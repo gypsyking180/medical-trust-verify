@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
@@ -10,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import RevocationProposalDialog from "@/components/forms/RevocationProposalDialog";
 
 // Define types for navigation items
 type BaseNavItem = {
@@ -37,6 +37,7 @@ type NavItem = LinkNavItem | DropdownNavItem;
 const NavBar = () => {
   const { userRole, isLoading } = useUserRole();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [revocationDialogOpen, setRevocationDialogOpen] = useState(false);
 
   // Define navigation links based on user role
   const getNavigationItems = (): NavItem[] => {
@@ -168,46 +169,73 @@ const NavBar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {navigationItems.map((item) => (
               'dropdown' in item && item.dropdown ? (
-                <DropdownMenu key={item.title}>
-                  <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
-                    {item.icon}
-                    <span className="ml-2">{item.title}</span>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
-                    {/* Dropdown buttons (supports children for dropdowns like Become Verifier and Proposal Portal) */}
-                    {'children' in item && item.children ? (
-                      item.children.map(child => (
-                        <DropdownMenuItem asChild key={child.title}>
-                          <Link to={child.path} className="flex items-center">
-                            {child.icon}
-                            <span>{child.title}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))
-                    ) : (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link to="/apply/genesis" className="flex items-center">
-                            <Shield className="mr-2" size={18} />
-                            <span>Apply as Genesis Member</span>
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to="/apply/health" className="flex items-center">
-                            <UserCheck className="mr-2" size={18} />
-                            <span>Apply as Health Professional</span>
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to="/apply/dao" className="flex items-center">
-                            <Users className="mr-2" size={18} />
-                            <span>Apply as DAO</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                item.title === "Proposal Portal" && userRole === UserRole.Verifier ? (
+                  <DropdownMenu key={item.title}>
+                    <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
+                      {item.icon}
+                      <span className="ml-2">{item.title}</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
+                      <DropdownMenuItem asChild>
+                        <button
+                          className="flex items-center w-full text-left focus:outline-none"
+                          onClick={() => setRevocationDialogOpen(true)}
+                          type="button"
+                        >
+                          <Trash2 className="mr-2" size={18} />
+                          <span>Revocation Proposal</span>
+                        </button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/proposals/fee" className="flex items-center">
+                          <DollarSign className="mr-2" size={18} />
+                          <span>Fee Proposal</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                    <RevocationProposalDialog open={revocationDialogOpen} onOpenChange={setRevocationDialogOpen} />
+                  </DropdownMenu>
+                ) : (
+                  <DropdownMenu key={item.title}>
+                    <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
+                      {item.icon}
+                      <span className="ml-2">{item.title}</span>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
+                      {'children' in item && item.children ? (
+                        item.children.map(child => (
+                          <DropdownMenuItem asChild key={child.title}>
+                            <Link to={child.path} className="flex items-center">
+                              {child.icon}
+                              <span>{child.title}</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        ))
+                      ) : (
+                        <>
+                          <DropdownMenuItem asChild>
+                            <Link to="/apply/genesis" className="flex items-center">
+                              <Shield className="mr-2" size={18} />
+                              <span>Apply as Genesis Member</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to="/apply/health" className="flex items-center">
+                              <UserCheck className="mr-2" size={18} />
+                              <span>Apply as Health Professional</span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to="/apply/dao" className="flex items-center">
+                              <Users className="mr-2" size={18} />
+                              <span>Apply as DAO</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )
               ) : (
                 <Link
                   key={item.title}
@@ -315,4 +343,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
