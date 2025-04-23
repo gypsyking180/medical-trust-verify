@@ -1,0 +1,8 @@
+
+/**
+ * Role addresses for app-level ownership and verifier identities.
+ * OWNER ADDRESS: 0x617012e1889e7f96aFa4eAea281f8ea54c537771
+ * VERIFIER ADDRESS: 0x6b72f7B4BF4Ca3F5a71bC3c3109Ce4227950aE19
+ */
+export const OWNER_ADDRESS = "0x617012e1889e7f96aFa4eAea281f8ea54c537771";
+export const VERIFIER_ADDRESS = "0x6b72f7B4BF4Ca3F5a71bC3c3109Ce4227950aE19";
