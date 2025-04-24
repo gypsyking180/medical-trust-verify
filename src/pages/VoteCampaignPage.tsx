@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import NavBar from '@/components/layout/NavBar';
 
 const VoteCampaignPage = () => {
   const [vote, setVote] = useState<string | null>(null);
@@ -80,72 +81,75 @@ const VoteCampaignPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Vote on Pending Campaigns</h1>
-      
-      <div className="grid gap-6">
-        {pendingCampaigns.map(campaign => (
-          <Card key={campaign.id} className="w-full">
-            <CardHeader>
-              <CardTitle>{campaign.title}</CardTitle>
-              <CardDescription>
-                Target: ${campaign.target} • Raised so far: ${campaign.raised}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{campaign.description}</p>
-              
-              <div className="space-y-4">
-                <RadioGroup value={vote || ""} onValueChange={setVote} className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id={`yes-${campaign.id}`} />
-                    <Label htmlFor={`yes-${campaign.id}`}>Yes, approve this campaign</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id={`no-${campaign.id}`} />
-                    <Label htmlFor={`no-${campaign.id}`}>No, reject this campaign</Label>
-                  </div>
-                </RadioGroup>
+    <>
+      <NavBar />
+      <div className="container mx-auto py-8">
+        <h1 className="text-3xl font-bold mb-8">Vote on Pending Campaigns</h1>
+        
+        <div className="grid gap-6">
+          {pendingCampaigns.map(campaign => (
+            <Card key={campaign.id} className="w-full">
+              <CardHeader>
+                <CardTitle>{campaign.title}</CardTitle>
+                <CardDescription>
+                  Target: ${campaign.target} • Raised so far: ${campaign.raised}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">{campaign.description}</p>
                 
-                {vote === 'no' && (
-                  <div className="mt-4">
-                    <Label htmlFor="comment">Reason for rejection (required)</Label>
-                    <Textarea 
-                      id="comment"
-                      placeholder="Please explain why you are voting to reject this campaign"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                )}
+                <div className="space-y-4">
+                  <RadioGroup value={vote || ""} onValueChange={setVote} className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id={`yes-${campaign.id}`} />
+                      <Label htmlFor={`yes-${campaign.id}`}>Yes, approve this campaign</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id={`no-${campaign.id}`} />
+                      <Label htmlFor={`no-${campaign.id}`}>No, reject this campaign</Label>
+                    </div>
+                  </RadioGroup>
+                  
+                  {vote === 'no' && (
+                    <div className="mt-4">
+                      <Label htmlFor="comment">Reason for rejection (required)</Label>
+                      <Textarea 
+                        id="comment"
+                        placeholder="Please explain why you are voting to reject this campaign"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
 
-                {vote === 'yes' && (
-                  <div className="mt-4">
-                    <Label htmlFor="comment">Comment (optional)</Label>
-                    <Textarea 
-                      id="comment"
-                      placeholder="Add an optional comment to your vote"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      className="mt-1"
-                    />
-                  </div>
-                )}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button 
-                onClick={() => handleSubmit(campaign.id)}
-                disabled={loading}
-              >
-                {loading ? "Submitting..." : "Submit Vote"}
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+                  {vote === 'yes' && (
+                    <div className="mt-4">
+                      <Label htmlFor="comment">Comment (optional)</Label>
+                      <Textarea 
+                        id="comment"
+                        placeholder="Add an optional comment to your vote"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        className="mt-1"
+                      />
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button 
+                  onClick={() => handleSubmit(campaign.id)}
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Submit Vote"}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
