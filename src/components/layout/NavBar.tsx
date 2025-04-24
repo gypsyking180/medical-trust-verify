@@ -43,6 +43,10 @@ const NavBar = () => {
               onOpenDialog={handleDialogOpen}
             />
 
+            <div className="hidden md:flex items-center">
+              <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />
+            </div>
+
             <div className="flex md:hidden items-center">
               <div className="mr-2">
                 <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />

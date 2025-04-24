@@ -56,28 +56,6 @@ export const getNavigationItems = (userRole: UserRole): NavItem[] => {
     return [
       ...commonLinks,
       {
-        title: 'Become Verifier',
-        dropdown: true,
-        icon: <User size={20} />,
-        children: [
-          {
-            title: "Apply as Genesis Member",
-            icon: <Shield className="mr-2" size={18} />,
-            path: "/apply/genesis"
-          },
-          {
-            title: "Apply as Health Professional",
-            icon: <UserCheck className="mr-2" size={18} />,
-            path: "/apply/health"
-          },
-          {
-            title: "Apply as DAO",
-            icon: <Users className="mr-2" size={18} />,
-            path: "/apply/dao"
-          }
-        ]
-      },
-      {
         title: 'Proposal Portal',
         dropdown: true,
         icon: <FileText size={20} />,
