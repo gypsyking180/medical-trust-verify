@@ -1,38 +1,14 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { UserRole, useUserRole } from '@/hooks/useUserRole';
-import { Heart, Info, Shield, Ambulance, User, FileText, Vote, Award, Menu, X, Users, UserCheck, Trash2, DollarSign } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { useUserRole } from '@/hooks/useUserRole';
+import { Heart, Menu, X } from 'lucide-react';
+import { getNavigationItems } from './navigation/navItems';
+import DesktopNav from './navigation/DesktopNav';
+import MobileMenu from './navigation/MobileMenu';
 import RevocationProposalDialog from "@/components/forms/RevocationProposalDialog";
 import FeeProposalDialog from "@/components/forms/FeeProposalDialog";
-
-type BaseNavItem = {
-  title: string;
-  icon: React.ReactNode;
-};
-
-type LinkNavItem = BaseNavItem & {
-  path: string;
-  dropdown?: never;
-};
-
-type DropdownNavItem = BaseNavItem & {
-  dropdown: true;
-  children?: Array<{
-    title: string;
-    icon: React.ReactNode;
-    path: string;
-  }>;
-  path?: never;
-};
-
-type NavItem = LinkNavItem | DropdownNavItem;
 
 const NavBar = () => {
   const { userRole, isLoading } = useUserRole();
@@ -40,117 +16,15 @@ const NavBar = () => {
   const [revocationDialogOpen, setRevocationDialogOpen] = useState(false);
   const [feeDialogOpen, setFeeDialogOpen] = useState(false);
 
-  const getNavigationItems = (): NavItem[] => {
-    const commonLinks: NavItem[] = [
-      {
-        title: 'Browse Campaign',
-        path: '/campaigns',
-        icon: <Heart className="text-medical-green" size={20} />
-      },
-      {
-        title: 'How It Works',
-        path: '/how-it-works',
-        icon: <Info size={20} />
-      }
-    ];
+  const navigationItems = getNavigationItems(userRole);
 
-    if (userRole === UserRole.Owner) {
-      return [
-        ...commonLinks,
-        {
-          title: 'Verification Portal',
-          path: '/verification',
-          icon: <Shield size={20} />
-        },
-        {
-          title: 'Emergency Portal',
-          path: '/emergency',
-          icon: <Ambulance size={20} />
-        }
-      ];
-    } else if (userRole === UserRole.Verifier) {
-      return [
-        ...commonLinks,
-        {
-          title: 'Become Verifier',
-          dropdown: true,
-          icon: <User size={20} />,
-          children: [
-            {
-              title: "Apply as Genesis Member",
-              icon: <Shield className="mr-2" size={18} />,
-              path: "/apply/genesis"
-            },
-            {
-              title: "Apply as Health Professional",
-              icon: <UserCheck className="mr-2" size={18} />,
-              path: "/apply/health"
-            },
-            {
-              title: "Apply as DAO",
-              icon: <Users className="mr-2" size={18} />,
-              path: "/apply/dao"
-            }
-          ]
-        },
-        {
-          title: 'Proposal Portal',
-          dropdown: true,
-          icon: <FileText size={20} />,
-          children: [
-            {
-              title: "Revocation Proposal",
-              icon: <Trash2 className="mr-2" size={18} />,
-              path: "/proposals/revocation"
-            },
-            {
-              title: "Fee Proposal",
-              icon: <DollarSign className="mr-2" size={18} />,
-              path: "/proposals/fee"
-            }
-          ]
-        },
-        {
-          title: 'Vote Portal',
-          path: '/vote',
-          icon: <Vote size={20} />
-        },
-        {
-          title: 'Claim Reward',
-          path: '/rewards',
-          icon: <Award size={20} />
-        }
-      ];
+  const handleDialogOpen = (type: 'revocation' | 'fee') => {
+    if (type === 'revocation') {
+      setRevocationDialogOpen(true);
     } else {
-      return [
-        ...commonLinks,
-        {
-          title: 'Become Verifier',
-          dropdown: true,
-          icon: <User size={20} />,
-          children: [
-            {
-              title: "Apply as Genesis Member",
-              icon: <Shield className="mr-2" size={18} />,
-              path: "/apply/genesis"
-            },
-            {
-              title: "Apply as Health Professional",
-              icon: <UserCheck className="mr-2" size={18} />,
-              path: "/apply/health"
-            },
-            {
-              title: "Apply as DAO",
-              icon: <Users className="mr-2" size={18} />,
-              path: "/apply/dao"
-            }
-          ]
-        }
-      ];
+      setFeeDialogOpen(true);
     }
   };
-
-  const navigationItems = getNavigationItems();
 
   return (
     <>
@@ -164,91 +38,10 @@ const NavBar = () => {
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center space-x-4">
-              {navigationItems.map((item) => (
-                'dropdown' in item && item.dropdown ? (
-                  item.title === "Proposal Portal" && userRole === UserRole.Verifier ? (
-                    <DropdownMenu key={item.title}>
-                      <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
-                        {item.icon}
-                        <span className="ml-2">{item.title}</span>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
-                        <DropdownMenuItem asChild>
-                          <button
-                            className="flex items-center w-full text-left focus:outline-none"
-                            onClick={() => setRevocationDialogOpen(true)}
-                            type="button"
-                          >
-                            <Trash2 className="mr-2" size={18} />
-                            <span>Revocation Proposal</span>
-                          </button>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to="/proposals/fee" className="flex items-center">
-                            <DollarSign className="mr-2" size={18} />
-                            <span>Fee Proposal</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                      <RevocationProposalDialog open={revocationDialogOpen} onOpenChange={setRevocationDialogOpen} />
-                    </DropdownMenu>
-                  ) : (
-                    <DropdownMenu key={item.title}>
-                      <DropdownMenuTrigger className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800">
-                        {item.icon}
-                        <span className="ml-2">{item.title}</span>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56 z-50 bg-white">
-                        {'children' in item && item.children ? (
-                          item.children.map(child => (
-                            <DropdownMenuItem asChild key={child.title}>
-                              <Link to={child.path} className="flex items-center">
-                                {child.icon}
-                                <span>{child.title}</span>
-                              </Link>
-                            </DropdownMenuItem>
-                          ))
-                        ) : (
-                          <>
-                            <DropdownMenuItem asChild>
-                              <Link to="/apply/genesis" className="flex items-center">
-                                <Shield className="mr-2" size={18} />
-                                <span>Apply as Genesis Member</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link to="/apply/health" className="flex items-center">
-                                <UserCheck className="mr-2" size={18} />
-                                <span>Apply as Health Professional</span>
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link to="/apply/dao" className="flex items-center">
-                                <Users className="mr-2" size={18} />
-                                <span>Apply as DAO</span>
-                              </Link>
-                            </DropdownMenuItem>
-                          </>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )
-                ) : (
-                  <Link
-                    key={item.title}
-                    to={item.path}
-                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-50 text-gray-800"
-                  >
-                    {item.icon}
-                    <span className="ml-2">{item.title}</span>
-                  </Link>
-                )
-              ))}
-              <div className="ml-4">
-                <ConnectButton showBalance={false} />
-              </div>
-            </div>
+            <DesktopNav 
+              navigationItems={navigationItems} 
+              onOpenDialog={handleDialogOpen}
+            />
 
             <div className="flex md:hidden items-center">
               <div className="mr-2">
@@ -266,74 +59,11 @@ const NavBar = () => {
           </div>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden p-4 bg-white shadow-lg rounded-b-lg">
-            <div className="flex flex-col space-y-2 pt-2 pb-3">
-              {navigationItems.map((item) => (
-                'dropdown' in item && item.dropdown ? (
-                  <div key={item.title} className="px-3 py-2">
-                    <div className="flex items-center text-base font-medium text-gray-800 mb-2">
-                      {item.icon}
-                      <span className="ml-2">{item.title}</span>
-                    </div>
-                    <div className="pl-6 flex flex-col space-y-2">
-                      {'children' in item && item.children ? (
-                        item.children.map(child => (
-                          <Link
-                            key={child.title}
-                            to={child.path}
-                            className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {child.icon}
-                            <span>{child.title}</span>
-                          </Link>
-                        ))
-                      ) : (
-                        <>
-                          <Link 
-                            to="/apply/genesis"
-                            className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <Shield className="mr-2" size={16} />
-                            <span>Apply as Genesis Member</span>
-                          </Link>
-                          <Link 
-                            to="/apply/health"
-                            className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <UserCheck className="mr-2" size={16} />
-                            <span>Apply as Health Professional</span>
-                          </Link>
-                          <Link 
-                            to="/apply/dao"
-                            className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            <Users className="mr-2" size={16} />
-                            <span>Apply as DAO</span>
-                          </Link>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <Link
-                    key={item.title}
-                    to={item.path}
-                    className="flex items-center px-3 py-2 rounded-md text-base font-medium hover:bg-gray-50 text-gray-800"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.icon}
-                    <span className="ml-2">{item.title}</span>
-                  </Link>
-                )
-              ))}
-            </div>
-          </div>
-        )}
+        <MobileMenu 
+          isOpen={isMenuOpen} 
+          navigationItems={navigationItems}
+          onClose={() => setIsMenuOpen(false)}
+        />
       </nav>
       <RevocationProposalDialog open={revocationDialogOpen} onOpenChange={setRevocationDialogOpen} />
       <FeeProposalDialog open={feeDialogOpen} onOpenChange={setFeeDialogOpen} />
