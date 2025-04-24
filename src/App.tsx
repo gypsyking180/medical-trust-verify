@@ -13,6 +13,9 @@ import ContractPage from "./pages/ContractPage";
 import NewCampaign from "./pages/NewCampaign";
 import AppealCampaign from "./pages/AppealCampaign";
 import DonatePage from "./pages/DonatePage";
+import VoteCampaignPage from "./pages/VoteCampaignPage";
+import VoteRevocationPage from "./pages/VoteRevocationPage";
+import VoteFeePage from "./pages/VoteFeePage";
 import Web3Provider from "./components/layout/Web3Provider";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
@@ -35,6 +38,9 @@ const App = () => (
               <Route path="/campaigns/new" element={<NewCampaign />} />
               <Route path="/campaigns/appeal" element={<AppealCampaign />} />
               <Route path="/donate" element={<DonatePage />} />
+              <Route path="/vote/campaign" element={<VoteCampaignPage />} />
+              <Route path="/vote/revocation" element={<VoteRevocationPage />} />
+              <Route path="/vote/fee" element={<VoteFeePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

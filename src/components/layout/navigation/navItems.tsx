@@ -96,8 +96,25 @@ export const getNavigationItems = (userRole: UserRole): NavItem[] => {
       },
       {
         title: 'Vote Portal',
-        path: '/vote',
-        icon: <Vote size={20} />
+        dropdown: true,
+        icon: <Vote size={20} />,
+        children: [
+          {
+            title: "Vote Campaign",
+            icon: <Heart className="mr-2" size={18} />,
+            path: "/vote/campaign"
+          },
+          {
+            title: "Vote Revocation",
+            icon: <Trash2 className="mr-2" size={18} />,
+            path: "/vote/revocation"
+          },
+          {
+            title: "Vote Fee Proposal",
+            icon: <DollarSign className="mr-2" size={18} />,
+            path: "/vote/fee"
+          }
+        ]
       },
       {
         title: 'Claim Reward',

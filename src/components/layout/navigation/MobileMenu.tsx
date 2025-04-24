@@ -36,34 +36,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navigationItems, onClos
                       <span>{child.title}</span>
                     </Link>
                   ))
-                ) : (
-                  <>
-                    <Link 
-                      to="/apply/genesis"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={onClose}
-                    >
-                      <Shield className="mr-2" size={16} />
-                      <span>Apply as Genesis Member</span>
-                    </Link>
-                    <Link 
-                      to="/apply/health"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={onClose}
-                    >
-                      <UserCheck className="mr-2" size={16} />
-                      <span>Apply as Health Professional</span>
-                    </Link>
-                    <Link 
-                      to="/apply/dao"
-                      className="flex items-center py-2 text-sm text-gray-700 hover:text-gray-900"
-                      onClick={onClose}
-                    >
-                      <Users className="mr-2" size={16} />
-                      <span>Apply as DAO</span>
-                    </Link>
-                  </>
-                )}
+                ) : null}
               </div>
             </div>
           ) : (
