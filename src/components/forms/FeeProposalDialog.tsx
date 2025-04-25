@@ -1,6 +1,14 @@
 
 import React, { useState } from "react";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription, 
+  DialogFooter, 
+  DialogClose 
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useVerifierContract } from "@/hooks/useVerifierContract";
@@ -11,21 +19,21 @@ interface FeeProposalDialogProps {
 }
 
 const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChange }) => {
-  const [proposedFee, setProposedFee] = useState<string>('');
+  const [proposedFee, setProposedFee] = useState("");
   const { proposeFee, isLoading } = useVerifierContract();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const feeValue = parseInt(proposedFee);
     
+    const feeValue = parseInt(proposedFee);
     if (isNaN(feeValue) || feeValue < 100 || feeValue > 300) {
       return;
     }
 
     const success = await proposeFee(feeValue);
     if (success) {
-      setProposedFee('');
-      onOpenChange?.(false);
+      setProposedFee("");
+      if (onOpenChange) onOpenChange(false);
     }
   };
 
@@ -50,7 +58,7 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
                 min="100"
                 max="300"
                 value={proposedFee}
-                onChange={e => setProposedFee(e.target.value)}
+                onChange={(e) => setProposedFee(e.target.value)}
                 placeholder="200"
                 disabled={isLoading}
                 autoFocus
