@@ -278,19 +278,6 @@ export const MEDICAL_VERIFIER_ABI = [
   },
   {
     "type": "function",
-    "name": "approveGenesis",
-    "inputs": [
-      {
-        "name": "applicant",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "balanceOf",
     "inputs": [
       {
@@ -989,49 +976,6 @@ export const MEDICAL_VERIFIER_ABI = [
   },
   {
     "type": "function",
-    "name": "hasDonatedToCampaign",
-    "inputs": [
-      {
-        "name": "donor",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "campaignId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "hasNFT",
-    "inputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "hasVotedOnApplication",
     "inputs": [
       {
@@ -1108,25 +1052,6 @@ export const MEDICAL_VERIFIER_ABI = [
     "inputs": [
       {
         "name": "_address",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isPendingGenesisApplicant",
-    "inputs": [
-      {
-        "name": "applicant",
         "type": "address",
         "internalType": "address"
       }
@@ -1325,59 +1250,73 @@ export const MEDICAL_VERIFIER_ABI = [
   },
   {
     "type": "function",
-    "name": "rejectGenesis",
+    "name": "renounceOwnership",
     "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
-  }
-];
-
-// Define types for contract data structures
-export interface ApplicationDocs {
-  fullName: string;
-  contactInfo: string;
-  governmentID: string;
-  professionalDocs: string;
-}
-
-export enum VerifierType {
-  None = 0,
-  HealthProfessional = 1,
-  Dao = 2,
-  AutoDao = 3,
-  Genesis = 4
-}
-
-export enum ApplicationStatus {
-  Pending = 0,
-  Approved = 1,
-  Rejected = 2,
-  Revoked = 3,
-  Withdrawn = 4
-}
-
-export interface VerifierData {
-  vType: VerifierType; 
-  status: ApplicationStatus;
-  docs: ApplicationDocs;
-  nftId: number;
-}
-
-export interface EmergencySettings {
-  paused: boolean;
-  duration: number;
-  lastPaused: number;
-}
-
-export interface SystemConfig {
-  maxHP: number;
-  maxDao: number;
-  minDonation: number;
-  minCampaigns: number;
-}
-
-export interface VerifierCounts {
-  health: number;
-  manualDao: number;
-  autoDao: number;
-}
+  },
+  {
+    "type": "function",
+    "name": "revocationProposals",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "yesVotes",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "noVotes",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "endTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "exists",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "safeTransferFrom",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "safeTransferFrom",
+    "inputs": [
+      {
+        "name": "from",
+        "type": "address",
+        "internalType": "address"
