@@ -1324,3 +1324,9 @@ export const MEDICAL_VERIFIER_ABI = [
         "name": "donor",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  }
+] as const;
