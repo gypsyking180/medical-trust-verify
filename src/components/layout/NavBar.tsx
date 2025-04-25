@@ -9,6 +9,8 @@ import DesktopNav from './navigation/DesktopNav';
 import MobileMenu from './navigation/MobileMenu';
 import RevocationProposalDialog from "@/components/forms/RevocationProposalDialog";
 import FeeProposalDialog from "@/components/forms/FeeProposalDialog";
+import ClaimRewardButton from "@/components/verifier/ClaimRewardButton";
+import { UserRole } from '@/hooks/useUserRole';
 
 const NavBar = () => {
   const { userRole, isLoading } = useUserRole();
@@ -43,14 +45,14 @@ const NavBar = () => {
               onOpenDialog={handleDialogOpen}
             />
 
-            <div className="hidden md:flex items-center">
+            <div className="hidden md:flex items-center gap-4">
+              {userRole === UserRole.Verifier && <ClaimRewardButton />}
               <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />
             </div>
 
-            <div className="flex md:hidden items-center">
-              <div className="mr-2">
-                <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />
-              </div>
+            <div className="flex md:hidden items-center gap-2">
+              {userRole === UserRole.Verifier && <ClaimRewardButton />}
+              <ConnectButton showBalance={false} chainStatus="none" accountStatus="address" />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none"
