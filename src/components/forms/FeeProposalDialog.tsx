@@ -40,6 +40,7 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
               Example: 200 = 2%
             </DialogDescription>
           </DialogHeader>
+          
           <div className="space-y-4 py-2">
             <div>
               <label className="block mb-1 font-medium text-sm">Proposed Fee (basis points)</label>
@@ -56,12 +57,22 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
               />
             </div>
           </div>
+          
           <DialogFooter>
-            <Button type="submit" disabled={isLoading || !proposedFee} className="w-full">
+            <Button 
+              type="submit" 
+              disabled={isLoading || !proposedFee} 
+              className="w-full"
+            >
               {isLoading ? "Submitting..." : "Submit Proposal"}
             </Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="w-full mt-2" disabled={isLoading}>
+              <Button 
+                type="button" 
+                variant="secondary" 
+                className="w-full mt-2" 
+                disabled={isLoading}
+              >
                 Cancel
               </Button>
             </DialogClose>

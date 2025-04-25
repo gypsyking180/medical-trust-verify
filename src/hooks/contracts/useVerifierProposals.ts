@@ -4,11 +4,17 @@ import { useBaseContract } from './useBaseContract';
 import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
 import { MEDICAL_VERIFIER_ABI } from '@/utils/contracts/medicalVerifier';
 
-export const useVerifierProposals = () => {
-  const [isLoading, setIsLoading] = useState(false);
+interface VerifierProposalsHook {
+  proposeRevocation: (targetAddress: string) => Promise<boolean>;
+  proposeFee: (feeAmount: number) => Promise<boolean>;
+  isLoading: boolean;
+}
+
+export const useVerifierProposals = (): VerifierProposalsHook => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { address, publicClient, walletClient, toast } = useBaseContract();
 
-  const proposeRevocation = useCallback(async (targetAddress: string) => {
+  const proposeRevocation = useCallback(async (targetAddress: string): Promise<boolean> => {
     if (!address || !walletClient) {
       toast({
         title: "Wallet not connected",
@@ -49,7 +55,7 @@ export const useVerifierProposals = () => {
     }
   }, [address, publicClient, walletClient, toast]);
 
-  const proposeFee = useCallback(async (feeAmount: number) => {
+  const proposeFee = useCallback(async (feeAmount: number): Promise<boolean> => {
     if (!address || !walletClient) {
       toast({
         title: "Wallet not connected",
@@ -70,11 +76,10 @@ export const useVerifierProposals = () => {
 
     setIsLoading(true);
     try {
-      // In a real implementation, this would call a contract method like 'proposeFee'
-      // For now, we're simulating it with a mock implementation
+      // Mock implementation - would call a contract method in production
       console.log(`Proposing fee change to ${feeAmount} basis points`);
       
-      // Simulate a delay for the transaction
+      // Simulate delay for the transaction
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
