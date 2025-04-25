@@ -10,15 +10,25 @@ import { useToast } from "@/hooks/use-toast";
 import FeeProposalDialog from '@/components/forms/FeeProposalDialog';
 import { useVerifierContract } from '@/hooks/useVerifierContract';
 
-const VoteFeePage = () => {
+// Define explicit types for mock data
+interface FeeProposal {
+  id: string;
+  currentFee: string;
+  proposedFee: string;
+  reason: string;
+  proposedBy: string;
+  endTime: string;
+}
+
+const VoteFeePage: React.FC = () => {
   const [vote, setVote] = useState<string | null>(null);
   const [comment, setComment] = useState('');
   const [feeDialogOpen, setFeeDialogOpen] = useState(false);
   const { isLoading } = useVerifierContract();
   const { toast } = useToast();
 
-  // Mock data - would come from contract in real implementation
-  const feeProposals = [
+  // Mock data with explicit typing
+  const feeProposals: FeeProposal[] = [
     {
       id: '1',
       currentFee: '2.5%',
@@ -47,9 +57,9 @@ const VoteFeePage = () => {
       return;
     }
 
-    // Mock contract interaction
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Mock contract interaction
+      await new Promise<void>(resolve => setTimeout(() => resolve(), 1000));
       
       toast({
         title: "Vote submitted successfully",
@@ -79,7 +89,7 @@ const VoteFeePage = () => {
         </div>
 
         <div className="grid gap-6">
-          {feeProposals.map(proposal => (
+          {feeProposals.map((proposal) => (
             <Card key={proposal.id} className="w-full">
               <CardHeader>
                 <CardTitle>Fee Change Proposal</CardTitle>

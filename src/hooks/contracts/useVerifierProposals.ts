@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useBaseContract } from './useBaseContract';
 
-// Define simple, explicit types
+// Very simple interface with explicit types
 interface ProposalsHookResult {
   proposeRevocation: (targetAddress: string) => Promise<boolean>;
   proposeFee: (feeAmount: number) => Promise<boolean>;
@@ -13,7 +13,7 @@ export function useVerifierProposals(): ProposalsHookResult {
   const [isLoading, setIsLoading] = useState(false);
   const { address, walletClient, toast } = useBaseContract();
 
-  // Simple implementation of proposeRevocation
+  // Simple implementation with explicit return types
   async function proposeRevocation(targetAddress: string): Promise<boolean> {
     if (!address || !walletClient) {
       toast({
@@ -35,11 +35,11 @@ export function useVerifierProposals(): ProposalsHookResult {
         description: "Your revocation proposal has been submitted successfully.",
       });
       return true;
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error proposing revocation:", error);
       toast({
         title: "Proposal Failed",
-        description: error?.message || "There was an error submitting your proposal.",
+        description: error instanceof Error ? error.message : "There was an error submitting your proposal.",
         variant: "destructive",
       });
       return false;
@@ -48,7 +48,7 @@ export function useVerifierProposals(): ProposalsHookResult {
     }
   }
 
-  // Simple implementation of proposeFee
+  // Simple implementation with explicit return types
   async function proposeFee(feeAmount: number): Promise<boolean> {
     if (!address || !walletClient) {
       toast({
@@ -79,11 +79,11 @@ export function useVerifierProposals(): ProposalsHookResult {
         description: `Your proposal for a ${feeAmount / 100}% fee has been submitted successfully.`,
       });
       return true;
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error proposing fee change:", error);
       toast({
         title: "Proposal Failed",
-        description: error?.message || "There was an error submitting your fee proposal.",
+        description: error instanceof Error ? error.message : "There was an error submitting your fee proposal.",
         variant: "destructive",
       });
       return false;

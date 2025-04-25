@@ -4,7 +4,30 @@ import { useVerifierVoting } from './contracts/useVerifierVoting';
 import { useVerifierProposals } from './contracts/useVerifierProposals';
 import { MEDICAL_VERIFIER_CONTRACT } from '@/config/contracts';
 
-export function useVerifierContract() {
+// Define the return type explicitly to help TypeScript
+interface VerifierContractHookResult {
+  // Applications
+  applyAsGenesis: (fullName: string, contactInfo: string, governmentID: string, professionalDocs: string) => Promise<boolean>;
+  applyAsHealthPro: (fullName: string, contactInfo: string, governmentID: string, professionalDocs: string) => Promise<boolean>;
+  applyAsDao: (fullName: string, contactInfo: string, governmentID: string) => Promise<boolean>;
+  
+  // Voting
+  voteOnApplication: (applicant: string, support: boolean) => Promise<boolean>;
+  voteOnRevocation: (targetAddress: string, support: boolean) => Promise<boolean>;
+  
+  // Proposals
+  proposeRevocation: (targetAddress: string) => Promise<boolean>;
+  proposeFee: (feeAmount: number) => Promise<boolean>;
+  
+  // Loading state
+  isLoading: boolean;
+  
+  // Contract info
+  contractAddress: string;
+  contractName: string;
+}
+
+export function useVerifierContract(): VerifierContractHookResult {
   const applications = useVerifierApplications();
   const voting = useVerifierVoting();
   const proposals = useVerifierProposals();

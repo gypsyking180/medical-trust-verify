@@ -30,10 +30,14 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
       return;
     }
 
-    const success = await proposeFee(feeValue);
-    if (success) {
-      setProposedFee("");
-      if (onOpenChange) onOpenChange(false);
+    try {
+      const success = await proposeFee(feeValue);
+      if (success && onOpenChange) {
+        setProposedFee("");
+        onOpenChange(false);
+      }
+    } catch (error) {
+      console.error("Error submitting fee proposal:", error);
     }
   };
 
