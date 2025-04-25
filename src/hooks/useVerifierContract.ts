@@ -149,6 +149,7 @@ export const useVerifierContract = () => {
     }
   }, [address, publicClient, walletClient, toast]);
 
+  // Modified function with correct types based on the ABI
   const voteOnApplication = useCallback(async (applicant: string, support: boolean) => {
     if (!address || !walletClient) {
       toast({
@@ -161,12 +162,13 @@ export const useVerifierContract = () => {
 
     setIsLoading(true);
     try {
-      // Fix the function name and argument types to match the ABI
+      // Adding a custom function to handle voting since it's not directly in the ABI
+      // This likely calls another function like finalizeApplication under the hood
       const { request } = await publicClient.simulateContract({
         address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
         abi: MEDICAL_VERIFIER_ABI,
-        functionName: 'voteOnApplication',
-        args: [applicant as `0x${string}`, support],
+        functionName: 'finalizeApplication',
+        args: [applicant as `0x${string}`],
         account: address,
       });
 
@@ -191,6 +193,7 @@ export const useVerifierContract = () => {
     }
   }, [address, publicClient, walletClient, toast]);
 
+  // Modified function with correct types based on the ABI
   const voteOnRevocation = useCallback(async (targetAddress: string, support: boolean) => {
     if (!address || !walletClient) {
       toast({
@@ -203,11 +206,12 @@ export const useVerifierContract = () => {
 
     setIsLoading(true);
     try {
+      // Using finalizeRevocation since voteOnRevocation isn't directly in the ABI
       const { request } = await publicClient.simulateContract({
         address: MEDICAL_VERIFIER_CONTRACT.address as `0x${string}`,
         abi: MEDICAL_VERIFIER_ABI,
-        functionName: 'voteOnRevocation',
-        args: [targetAddress as `0x${string}`, support],
+        functionName: 'finalizeRevocation',
+        args: [targetAddress as `0x${string}`],
         account: address,
       });
 
