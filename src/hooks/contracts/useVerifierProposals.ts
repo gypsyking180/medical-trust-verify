@@ -59,6 +59,15 @@ export const useVerifierProposals = () => {
       return false;
     }
 
+    if (feeAmount < 100 || feeAmount > 300) {
+      toast({
+        title: "Invalid fee amount",
+        description: "Fee must be between 100 and 300 basis points (1-3%)",
+        variant: "destructive",
+      });
+      return false;
+    }
+
     setIsLoading(true);
     try {
       // In a real implementation, this would call a contract method like 'proposeFee'

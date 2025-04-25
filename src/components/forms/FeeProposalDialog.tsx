@@ -18,8 +18,7 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
     e.preventDefault();
     const feeValue = parseInt(proposedFee);
     
-    if (feeValue < 100 || feeValue > 300) {
-      // This toast will come from the proposeFee function
+    if (isNaN(feeValue) || feeValue < 100 || feeValue > 300) {
       return;
     }
 
