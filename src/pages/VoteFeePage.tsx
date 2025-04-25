@@ -8,12 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import FeeProposalDialog from '@/components/forms/FeeProposalDialog';
+import { useVerifierContract } from '@/hooks/useVerifierContract';
 
 const VoteFeePage = () => {
   const [vote, setVote] = useState<string | null>(null);
   const [comment, setComment] = useState('');
-  const [loading, setLoading] = useState(false);
   const [feeDialogOpen, setFeeDialogOpen] = useState(false);
+  const { isLoading } = useVerifierContract();
   const { toast } = useToast();
 
   // Mock data - would come from contract in real implementation
@@ -46,10 +47,8 @@ const VoteFeePage = () => {
       return;
     }
 
-    setLoading(true);
-
+    // Mock contract interaction
     try {
-      // Mock contract interaction
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
@@ -67,8 +66,6 @@ const VoteFeePage = () => {
         description: "There was a problem submitting your vote. Please try again.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -127,9 +124,9 @@ const VoteFeePage = () => {
               <CardFooter>
                 <Button 
                   onClick={() => handleSubmit(proposal.id)}
-                  disabled={loading || !vote}
+                  disabled={isLoading || !vote}
                 >
-                  {loading ? "Submitting..." : "Submit Vote"}
+                  {isLoading ? "Submitting..." : "Submit Vote"}
                 </Button>
               </CardFooter>
             </Card>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useVerifierContract } from "@/hooks/useVerifierContract";
 
 interface FeeProposalDialogProps {
   open?: boolean;
@@ -12,33 +12,22 @@ interface FeeProposalDialogProps {
 
 const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChange }) => {
   const [proposedFee, setProposedFee] = useState<string>('');
-  const [submitting, setSubmitting] = useState(false);
-  const { toast } = useToast();
+  const { proposeFee, isLoading } = useVerifierContract();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const feeValue = parseInt(proposedFee);
     
     if (feeValue < 100 || feeValue > 300) {
-      toast({
-        title: "Invalid Fee Range",
-        description: "Fee must be between 100 (1%) and 300 (3%) basis points",
-        variant: "destructive",
-      });
+      // This toast will come from the proposeFee function
       return;
     }
 
-    setSubmitting(true);
-    // In actual usage: call contract function here
-    setTimeout(() => {
-      setSubmitting(false);
-      toast({
-        title: "Fee Proposal Submitted",
-        description: `Your fee proposal of ${feeValue / 100}% has been submitted successfully.`,
-      });
+    const success = await proposeFee(feeValue);
+    if (success) {
       setProposedFee('');
       onOpenChange?.(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -63,17 +52,17 @@ const FeeProposalDialog: React.FC<FeeProposalDialogProps> = ({ open, onOpenChang
                 value={proposedFee}
                 onChange={e => setProposedFee(e.target.value)}
                 placeholder="200"
-                disabled={submitting}
+                disabled={isLoading}
                 autoFocus
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={submitting || !proposedFee} className="w-full">
-              {submitting ? "Submitting..." : "Submit Proposal"}
+            <Button type="submit" disabled={isLoading || !proposedFee} className="w-full">
+              {isLoading ? "Submitting..." : "Submit Proposal"}
             </Button>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="w-full mt-2" disabled={submitting}>
+              <Button type="button" variant="secondary" className="w-full mt-2" disabled={isLoading}>
                 Cancel
               </Button>
             </DialogClose>

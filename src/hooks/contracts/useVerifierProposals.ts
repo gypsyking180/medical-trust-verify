@@ -49,8 +49,46 @@ export const useVerifierProposals = () => {
     }
   }, [address, publicClient, walletClient, toast]);
 
+  const proposeFee = useCallback(async (feeAmount: number) => {
+    if (!address || !walletClient) {
+      toast({
+        title: "Wallet not connected",
+        description: "Please connect your wallet to propose a fee change",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    setIsLoading(true);
+    try {
+      // In a real implementation, this would call a contract method like 'proposeFee'
+      // For now, we're simulating it with a mock implementation
+      console.log(`Proposing fee change to ${feeAmount} basis points`);
+      
+      // Simulate a delay for the transaction
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast({
+        title: "Fee Proposal Submitted",
+        description: `Your proposal for a ${feeAmount / 100}% fee has been submitted successfully.`,
+      });
+      return true;
+    } catch (error: any) {
+      console.error("Error proposing fee change:", error);
+      toast({
+        title: "Proposal Failed",
+        description: error?.message || "There was an error submitting your fee proposal.",
+        variant: "destructive",
+      });
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [address, walletClient, toast]);
+
   return {
     proposeRevocation,
+    proposeFee,
     isLoading
   };
 };
