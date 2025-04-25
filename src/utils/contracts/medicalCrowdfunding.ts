@@ -85,6 +85,10 @@ export interface CampaignBasicInfo {
   feesDistributed: boolean;
 }
 
+export const campaignStatusFromNumber = (status: number): CampaignStatus => {
+  return status as CampaignStatus;
+};
+
 export const MEDICAL_CROWDFUNDING_ABI = [
   // Paste the entire ABI here, as provided in your message
 ] as const;
